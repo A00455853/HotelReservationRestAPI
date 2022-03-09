@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="rooms")
+@Table(name="hotelroom")
 public class Rooms implements Serializable {
 
     @Id
@@ -44,19 +44,8 @@ public class Rooms implements Serializable {
         this.available = available;
     }
 
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "id", nullable = false)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-//    @JsonIgnore
-//    private Hotel hotel;
-//
-//    public Hotel getHotel() {
-//        return hotel;
-//    }
-//
-//    public void setHotel(Hotel hotel) {
-//        this.hotel = hotel;
-//    }
+
+
 
     @Override
     public String toString() {

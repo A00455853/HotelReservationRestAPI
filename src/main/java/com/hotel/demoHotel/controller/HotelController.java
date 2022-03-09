@@ -3,8 +3,10 @@ package com.hotel.demoHotel.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.hotel.demoHotel.model.AddRooms;
 import com.hotel.demoHotel.model.Hotel;
 import com.hotel.demoHotel.model.MessageResponse;
+import com.hotel.demoHotel.model.Rooms;
 import com.hotel.demoHotel.service.HotelService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,4 +64,15 @@ public class HotelController {
     	hotelService.deleteHotel(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
+//    @PostMapping("/addRooms")
+//    public ResponseEntity<MessageResponse> addHotel(@RequestBody AddRooms room) {
+//
+//        Hotel hotel = hotelService.getHotelDetailsById(room.getHotelid());
+//        logger.info("Post: adding new rooms in hotel:"+hotel.getHotelname());
+//
+//      //  MessageResponse hotelCreated = hotelService.addRooms(room, hotelid);
+//        return new ResponseEntity<>(hotelCreated, HttpStatus.CREATED);
+//    }
 }

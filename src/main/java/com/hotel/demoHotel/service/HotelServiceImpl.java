@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.hotel.demoHotel.dao.HotelRepository;
+import com.hotel.demoHotel.dao.RoomsRepository;
 import com.hotel.demoHotel.exception.ResourceNotFoundException;
 import com.hotel.demoHotel.model.Hotel;
 import com.hotel.demoHotel.model.MessageResponse;
+import com.hotel.demoHotel.model.Rooms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ public class HotelServiceImpl implements HotelService{
 	    
 	    @Autowired
 		HotelRepository hotelRepository;
+		@Autowired
+		RoomsRepository roomsRepository;
 
 	    @Override
 	    public MessageResponse createHotel(Hotel hotelreq) {
@@ -27,8 +31,9 @@ public class HotelServiceImpl implements HotelService{
 	        hotel.setAddress(hotelreq.getAddress());
 	        hotel.setNumberOfRooms(hotelreq.getNumberOfRooms());
 	        hotel.setStarrating(hotelreq.getStarrating());
+
 	       
-	        hotelRepository.save(hotel);
+	        hotelRepository.save(hotelreq);
 	        return new MessageResponse("New Hotel created successfully");
 
 	    }
@@ -59,11 +64,26 @@ public class HotelServiceImpl implements HotelService{
 	    public List<Hotel> getAllHotel() {
 	        return hotelRepository.findAll();
 	    }
-	    @Override
+
+
+
+	@Override
 	    public void deleteHotel(Integer id) throws ResourceNotFoundException {
 	        if (hotelRepository.getById(id).getId().equals(id)){
 	        	hotelRepository.deleteById(id);
 	        }
 	        else throw new ResourceNotFoundException("Hotel", "id", id);
 	    }
+
+	@Override
+	public MessageResponse addRooms(Rooms roomsreq, int hotelid) {
+
+	Rooms room = new Rooms();
+	room.setAvailable(roomsreq.getAvailable());
+	//room.set
+
+		//roomsRepository.save(rooms);
+		return new MessageResponse("New room has been added  successfully");
+
+	}
 }

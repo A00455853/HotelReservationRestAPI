@@ -18,7 +18,7 @@ public class Hotel implements Serializable {
 		private String country;
 		private String address;
 		@OneToMany(cascade = CascadeType.ALL)
-		@JoinColumn(name = "rm_id", referencedColumnName = "id")
+		@JoinColumn(name = "hotel_id", referencedColumnName = "id")
 		List< Rooms > rooms = new ArrayList< >();
 
 		public Hotel(Integer id, String hotelname, Float starrating, Integer numberOfRooms, String city, String country, String address) {

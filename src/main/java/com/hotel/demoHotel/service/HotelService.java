@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.hotel.demoHotel.model.Hotel;
 import com.hotel.demoHotel.model.MessageResponse;
+import com.hotel.demoHotel.model.Rooms;
 import org.springframework.stereotype.Service;
 
 
@@ -18,6 +19,7 @@ public interface HotelService {
     void deleteHotel(Integer id);
     Hotel getHotelDetailsById(Integer id);
     List<Hotel> getAllHotel();
+    MessageResponse addRooms(Rooms room, int hotelid);
 
 
 }
