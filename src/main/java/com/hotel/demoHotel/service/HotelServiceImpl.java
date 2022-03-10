@@ -3,12 +3,12 @@ package com.hotel.demoHotel.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.hotel.demoHotel.dao.BookingRepository;
 import com.hotel.demoHotel.dao.HotelRepository;
 import com.hotel.demoHotel.dao.RoomsRepository;
+import com.hotel.demoHotel.dao.UserRepository;
 import com.hotel.demoHotel.exception.ResourceNotFoundException;
-import com.hotel.demoHotel.model.Hotel;
-import com.hotel.demoHotel.model.MessageResponse;
-import com.hotel.demoHotel.model.Rooms;
+import com.hotel.demoHotel.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +23,10 @@ public class HotelServiceImpl implements HotelService{
 		HotelRepository hotelRepository;
 		@Autowired
 		RoomsRepository roomsRepository;
+		@Autowired
+		UserRepository userRepository;
+		@Autowired
+		BookingRepository bookingRepository;
 
 	    @Override
 	    public MessageResponse createHotel(Hotel hotelreq) {
@@ -76,14 +80,30 @@ public class HotelServiceImpl implements HotelService{
 	    }
 
 	@Override
-	public MessageResponse addRooms(Rooms roomsreq, int hotelid) {
+	public MessageResponse addRooms(AddRooms roomsreq, int hotelid) {
 
-	Rooms room = new Rooms();
-	room.setAvailable(roomsreq.getAvailable());
-	//room.set
+			Rooms room = new Rooms();
+			room.setAvailable(roomsreq.getAvailable());
+			room.setPrice(roomsreq.getPrice());
+			room.setNumber(roomsreq.getNumber());
+			roomsRepository.save(room);
+			return new MessageResponse("New room has been added  to hotelid:"+hotelid);
 
-		//roomsRepository.save(rooms);
-		return new MessageResponse("New room has been added  successfully");
+	}
 
+	@Override
+	public User getUserById(Integer id) {
+		return userRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+	}
+	public Rooms getRoomById(Integer id) {
+		return roomsRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+	}
+
+	@Override
+	public BookingDetails bookRoom(BookingDetails bookingDetails) {
+		BookingDetails bookingDetails1 =  bookingRepository.save(bookingDetails);
+		return bookingDetails1;
 	}
 }

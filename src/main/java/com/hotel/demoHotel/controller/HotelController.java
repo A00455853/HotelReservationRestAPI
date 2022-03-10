@@ -1,13 +1,13 @@
 package com.hotel.demoHotel.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-import com.hotel.demoHotel.model.AddRooms;
-import com.hotel.demoHotel.model.Hotel;
-import com.hotel.demoHotel.model.MessageResponse;
-import com.hotel.demoHotel.model.Rooms;
+import com.hotel.demoHotel.model.*;
 import com.hotel.demoHotel.service.HotelService;
+import com.hotel.demoHotel.utils.HotelUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -66,13 +66,33 @@ public class HotelController {
     }
 
 
-//    @PostMapping("/addRooms")
-//    public ResponseEntity<MessageResponse> addHotel(@RequestBody AddRooms room) {
-//
-//        Hotel hotel = hotelService.getHotelDetailsById(room.getHotelid());
-//        logger.info("Post: adding new rooms in hotel:"+hotel.getHotelname());
-//
-//      //  MessageResponse hotelCreated = hotelService.addRooms(room, hotelid);
-//        return new ResponseEntity<>(hotelCreated, HttpStatus.CREATED);
-//    }
+    @PostMapping("/addRooms/{hotelId}")
+    public ResponseEntity<Hotel> addHotel(@PathVariable("hotelId") Integer hotelId,@RequestBody Rooms room) {
+
+        Hotel hotel = hotelService.getHotelDetailsById(hotelId);
+        logger.info("Post: adding new rooms in hotel:"+hotel.getHotelname());
+        List<Rooms> roomList = hotel.getRooms();
+        roomList.add(room);
+        hotel.setRooms(roomList);
+        hotelService.updateHotel(hotelId,hotel);
+
+        return new ResponseEntity<Hotel>(hotel, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/bookRoom")
+    public ResponseEntity<BookingDetails> bookRoom(@RequestBody BookRoom bookroom) {
+        BookingDetails bookingDetails = new BookingDetails() ;
+        bookingDetails.setDate_from(HotelUtils.convertDate(bookroom.getDate_from()));
+        bookingDetails.setDate_to(HotelUtils.convertDate(bookroom.getDate_to()));
+        bookingDetails.setTotal_price(bookroom.getTotal_price());
+        bookingDetails.setUser_id(bookroom.getUserid());
+        bookingDetails.setRoom_id(bookroom.getRoom_id());
+        bookingDetails.setBook_ref_num(UUID.randomUUID().toString().replace("-", ""));
+        bookingDetails.setGuests(bookroom.getGuestList());
+
+//        BookingDetails bookings = new BookingDetails(, , , , );
+       BookingDetails booking=  hotelService.bookRoom(bookingDetails);
+
+        return new ResponseEntity<BookingDetails>(booking, HttpStatus.CREATED);
+    }
 }

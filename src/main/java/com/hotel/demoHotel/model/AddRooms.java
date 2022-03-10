@@ -1,6 +1,6 @@
 package com.hotel.demoHotel.model;
 
-import javax.persistence.Column;
+
 
 public class AddRooms {
     private Integer Hotelid;

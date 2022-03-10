@@ -3,9 +3,7 @@ package com.hotel.demoHotel.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.hotel.demoHotel.model.Hotel;
-import com.hotel.demoHotel.model.MessageResponse;
-import com.hotel.demoHotel.model.Rooms;
+import com.hotel.demoHotel.model.*;
 import org.springframework.stereotype.Service;
 
 
@@ -19,7 +17,10 @@ public interface HotelService {
     void deleteHotel(Integer id);
     Hotel getHotelDetailsById(Integer id);
     List<Hotel> getAllHotel();
-    MessageResponse addRooms(Rooms room, int hotelid);
+    MessageResponse addRooms(AddRooms room, int hotelid);
+    User getUserById(Integer id);
+    Rooms getRoomById(Integer id);
+   BookingDetails  bookRoom(BookingDetails  bookingDetails);
 
 
 }
