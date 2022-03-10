@@ -1,10 +1,12 @@
 package com.hotel.demoHotel.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.hotel.demoHotel.DTO.BookHotelRoom;
+import com.hotel.demoHotel.DTO.BookRoom;
+import com.hotel.demoHotel.DTO.MessageResponse;
 import com.hotel.demoHotel.model.*;
 import com.hotel.demoHotel.service.HotelService;
 import com.hotel.demoHotel.utils.HotelUtils;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.websocket.server.PathParam;
 
 
 @RestController
@@ -37,7 +40,6 @@ public class HotelController {
         List<Hotel> hotelList = hotelService.getAllHotel();
         return new ResponseEntity<>(hotelList, HttpStatus.OK);
     }
-	
 	@GetMapping("/find/{id}")
     public ResponseEntity<Hotel> getHotelDetailsById (@PathVariable("id") Integer id) {
         logger.info("GET: getting the hotel details with id :"+id);
@@ -95,4 +97,13 @@ public class HotelController {
 
         return new ResponseEntity<BookingDetails>(booking, HttpStatus.CREATED);
     }
+    @GetMapping("/hoteRoomlListForBooking")
+    public ResponseEntity<Hotel> getHotelListByLocation (@RequestBody BookHotelRoom bookHotelRoom) {
+        logger.info("GET: ferching all the list of hotel room eligible for booking for given date range");
+        logger.info("checkin date:"+bookHotelRoom.getCheckindate()+" checkout date "+bookHotelRoom.getCheckoutDate()+" hotel name: "+bookHotelRoom.getHotelName());
+        Hotel hotelRoomListForBooking = hotelService.getAvailableRooms(bookHotelRoom);
+        return new ResponseEntity<>(hotelRoomListForBooking, HttpStatus.OK);
+    }
+
+
 }

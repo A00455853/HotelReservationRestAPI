@@ -1,6 +1,7 @@
-package com.hotel.demoHotel.model;
+package com.hotel.demoHotel.DTO;
 
 
+import com.hotel.demoHotel.model.Category;
 
 public class AddRooms {
     private Integer Hotelid;

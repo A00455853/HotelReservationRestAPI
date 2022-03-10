@@ -3,6 +3,9 @@ package com.hotel.demoHotel.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.hotel.demoHotel.DTO.AddRooms;
+import com.hotel.demoHotel.DTO.BookHotelRoom;
+import com.hotel.demoHotel.DTO.MessageResponse;
 import com.hotel.demoHotel.dao.BookingRepository;
 import com.hotel.demoHotel.dao.HotelRepository;
 import com.hotel.demoHotel.dao.RoomsRepository;
@@ -105,5 +108,18 @@ public class HotelServiceImpl implements HotelService{
 	public BookingDetails bookRoom(BookingDetails bookingDetails) {
 		BookingDetails bookingDetails1 =  bookingRepository.save(bookingDetails);
 		return bookingDetails1;
+	}
+
+	@Override
+	public Hotel getAvailableRooms(BookHotelRoom bookHotelRoom) {
+	    	Hotel hotel = getHotelDetailsById(bookHotelRoom.getHotelid());
+
+	    	List<Rooms> roomList = roomsRepository.findAvailableRooms(bookHotelRoom.getCity(),
+					bookHotelRoom.getHotelid(),bookHotelRoom.getCheckindate(),
+					bookHotelRoom.getCheckoutDate());
+	    	hotel.setRooms(roomList);
+
+
+	    	return hotel;
 	}
 }

@@ -1,4 +1,4 @@
-package com.hotel.demoHotel.model;
+package com.hotel.demoHotel.DTO;
 
 public class MessageResponse {
 	private String message;
