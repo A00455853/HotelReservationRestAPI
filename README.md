@@ -19,7 +19,7 @@ Sample object : Hotel
 "address": "street no 39 waynad"
 }`
 1. **GET** : http://127.0.0.1:8081/demo/hoteldemo/all It will list all the hotel present in database.
-   ![alt text](https://github.com/A00455853/HotelReservationRestAPI/blob/master/Images/Screenshot%202022-03-11%20at%2011.39.29%20PM.png)
+   ![alt text](https://github.com/A00455853/HotelReservationRestAPI/blob/master/Images/sc11.png)
 2. **POST** : http://127.0.0.1:8081/demo/hoteldemo/add    To all new hotel in database 
 request body :
    `{
@@ -32,7 +32,7 @@ request body :
 response : `{
    "message": "New Hotel created successfully"
    }`
-   
+   ![alt text](https://github.com/A00455853/HotelReservationRestAPI/blob/master/Images/sc10.png)
 3. **PUT** : http://127.0.0.1:8081/demo/hoteldemo/update/{id}
 example : http://127.0.0.1:8081/demo/hoteldemo/update/1
 Sample object :
@@ -42,10 +42,12 @@ Sample object :
    "city": "Waynad",
    "country": "India",
    "address": "street no 39 waynad"
-   } ` 
+   } `
+   ![alt text](https://github.com/A00455853/HotelReservationRestAPI/blob/master/Images/sc9.png)
 4. **DELETE**:  http://127.0.0.1:8081/demo/hoteldemo/delete/{id} 
 example : http://127.0.0.1:8081/demo/hoteldemo/delete/1
-   
+   ![alt text](https://github.com/A00455853/HotelReservationRestAPI/blob/master/Images/sc8.png)   
+
 5. **POST** : http://127.0.0.1:8081/demo/hoteldemo/addRooms/{hotelid}
    Example : http://127.0.0.1:8081/demo/hoteldemo/addRooms/7
    requestbody sample object :
@@ -94,7 +96,8 @@ example : http://127.0.0.1:8081/demo/hoteldemo/delete/1
    }
    ]
    }`
-
+   ![alt text](https://github.com/A00455853/HotelReservationRestAPI/blob/master/Images/sc6.png)
+   ![alt text](https://github.com/A00455853/HotelReservationRestAPI/blob/master/Images/sc7.png)
 
 6. **GET** : http://127.0.0.1:8081/demo/hoteldemo/hoteRoomlListForBooking
 Sample object :
@@ -136,6 +139,8 @@ Sample response :
 }
 ]
 }`
+![alt text](https://github.com/A00455853/HotelReservationRestAPI/blob/master/Images/sc4.png)
+![alt text](https://github.com/A00455853/HotelReservationRestAPI/blob/master/Images/sc5.png)
 
 
 7. **POST** : http://127.0.0.1:8081/demo/hoteldemo/bookRoom
@@ -205,4 +210,5 @@ Sample response body :
 ]
 }`
 
-
+![alt text](https://github.com/A00455853/HotelReservationRestAPI/blob/master/Images/sc2.png)
+![alt text](https://github.com/A00455853/HotelReservationRestAPI/blob/master/Images/sc3.png)
