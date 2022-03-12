@@ -19,7 +19,7 @@ Sample object : Hotel
 "address": "street no 39 waynad"
 }`
 1. **GET** : http://127.0.0.1:8081/demo/hoteldemo/all It will list all the hotel present in database.
-   ![alt text](https://github.com/A00457310/HotelReservationSystem/blob/main/create_hotel.png)
+   ![alt text](https://github.com/A00455853/HotelReservationRestAPI/blob/master/Images/Screenshot%202022-03-11%20at%2011.39.29%20PM.png)
 2. **POST** : http://127.0.0.1:8081/demo/hoteldemo/add    To all new hotel in database 
 request body :
    `{
