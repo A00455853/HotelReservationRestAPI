@@ -2,16 +2,21 @@ package com.hotel.demoHotel.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.hotel.demoHotel.DTO.AddRooms;
 import com.hotel.demoHotel.DTO.BookHotelRoom;
+import com.hotel.demoHotel.DTO.BookRoom;
 import com.hotel.demoHotel.DTO.MessageResponse;
+import com.hotel.demoHotel.controller.HotelController;
 import com.hotel.demoHotel.dao.BookingRepository;
 import com.hotel.demoHotel.dao.HotelRepository;
 import com.hotel.demoHotel.dao.RoomsRepository;
 import com.hotel.demoHotel.dao.UserRepository;
 import com.hotel.demoHotel.exception.ResourceNotFoundException;
 import com.hotel.demoHotel.model.*;
+import com.hotel.demoHotel.utils.HotelUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,31 +35,25 @@ public class HotelServiceImpl implements HotelService{
 		UserRepository userRepository;
 		@Autowired
 		BookingRepository bookingRepository;
-
+	final static Logger logger = Logger.getLogger(HotelServiceImpl.class);
 	    @Override
 	    public MessageResponse createHotel(Hotel hotelreq) {
-	        Hotel hotel = new Hotel();
-	        hotel.setHotelname(hotelreq.getHotelname());
-	        hotel.setAddress(hotelreq.getAddress());
-	        hotel.setNumberOfRooms(hotelreq.getNumberOfRooms());
-	        hotel.setStarrating(hotelreq.getStarrating());
-
-	       
-	        hotelRepository.save(hotelreq);
+	    	hotelRepository.save(hotelreq);
 	        return new MessageResponse("New Hotel created successfully");
 
 	    }
 
 	    @Override
 	    public Optional<Hotel> updateHotel(Integer id, Hotel hotelReq)  throws ResourceNotFoundException {
+	       logger.info("getting the hotel with id "+id);
 	        Optional<Hotel> hotel = hotelRepository.findById(id);
 	        if (hotel==null){
-	        throw new ResourceNotFoundException("hotel", "id", id);
+	        	logger.error("hotel not found with id :"+id);
+	        	throw new ResourceNotFoundException("hotel", "id", id);
 	        }
 	        else
 	        hotel.get().setHotelname(hotelReq.getHotelname());
 	        hotel.get().setAddress(hotelReq.getAddress());
-	        hotel.get().setNumberOfRooms(hotelReq.getNumberOfRooms());
 	        hotel.get().setStarrating(hotelReq.getStarrating());
 	     
 	        hotelRepository.save(hotel.get());
@@ -86,7 +85,6 @@ public class HotelServiceImpl implements HotelService{
 	public MessageResponse addRooms(AddRooms roomsreq, int hotelid) {
 
 			Rooms room = new Rooms();
-			room.setAvailable(roomsreq.getAvailable());
 			room.setPrice(roomsreq.getPrice());
 			room.setNumber(roomsreq.getNumber());
 			roomsRepository.save(room);
@@ -121,5 +119,18 @@ public class HotelServiceImpl implements HotelService{
 
 
 	    	return hotel;
+	}
+
+
+	public BookingDetails getBookingDetails(BookRoom bookroom) {
+		BookingDetails bookingDetails = new BookingDetails();
+		bookingDetails.setDate_from(HotelUtils.convertDate(bookroom.getDate_from()));
+		bookingDetails.setDate_to(HotelUtils.convertDate(bookroom.getDate_to()));
+		bookingDetails.setTotal_price(bookroom.getTotal_price());
+		bookingDetails.setUser_id(bookroom.getUserid());
+		bookingDetails.setRoom_id(bookroom.getRoom_id());
+		bookingDetails.setBook_ref_num(UUID.randomUUID().toString().replace("-", ""));
+		bookingDetails.setGuests(bookroom.getGuestList());
+		return bookingDetails;
 	}
 }

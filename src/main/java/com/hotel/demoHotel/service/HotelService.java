@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.hotel.demoHotel.DTO.AddRooms;
 import com.hotel.demoHotel.DTO.BookHotelRoom;
+import com.hotel.demoHotel.DTO.BookRoom;
 import com.hotel.demoHotel.DTO.MessageResponse;
 import com.hotel.demoHotel.model.*;
 import org.springframework.stereotype.Service;
@@ -27,4 +28,5 @@ public interface HotelService {
 
 
     Hotel getAvailableRooms(BookHotelRoom bookHotelRoom);
+     BookingDetails getBookingDetails(BookRoom bookroom) ;
 }

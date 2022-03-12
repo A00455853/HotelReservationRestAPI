@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.hotel.demoHotel.DTO.BookHotelRoom;
 import com.hotel.demoHotel.DTO.BookRoom;
 import com.hotel.demoHotel.DTO.MessageResponse;
+import com.hotel.demoHotel.exception.ResourceNotFoundException;
 import com.hotel.demoHotel.model.*;
 import com.hotel.demoHotel.service.HotelService;
 import com.hotel.demoHotel.utils.HotelUtils;
@@ -29,78 +30,80 @@ import javax.websocket.server.PathParam;
 @RestController
 @RequestMapping("/hoteldemo")
 public class HotelController {
-	
-	  @Autowired
-      HotelService hotelService;
+
+    @Autowired
+    HotelService hotelService;
     final static Logger logger = Logger.getLogger(HotelController.class);
-	  
-	@GetMapping("/all")
-    public ResponseEntity<List<Hotel>> getAllHotelDetails () {
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Hotel>> getAllHotelDetails() {
         logger.info("GET: All Hotel list");
         List<Hotel> hotelList = hotelService.getAllHotel();
         return new ResponseEntity<>(hotelList, HttpStatus.OK);
     }
-	@GetMapping("/find/{id}")
-    public ResponseEntity<Hotel> getHotelDetailsById (@PathVariable("id") Integer id) {
-        logger.info("GET: getting the hotel details with id :"+id);
-        Hotel hotel = hotelService.getHotelDetailsById(id);
+
+    @GetMapping("/find/{id}")
+    public ResponseEntity<Hotel> getHotelDetailsById(@PathVariable("id") Integer id) {
+        logger.info("GET: getting the hotel details with id :" + id);
+        Hotel hotel = new Hotel();
+        try {
+            hotel = hotelService.getHotelDetailsById(id);
+        } catch (ResourceNotFoundException e) {
+            logger.error("Hotel Not found with id :" + id);
+            return new ResponseEntity<>(hotel, HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(hotel, HttpStatus.OK);
     }
+
     @PostMapping("/add")
     public ResponseEntity<MessageResponse> addHotel(@RequestBody Hotel hotel) {
-        logger.info("POST: adding new hotel to database with name:"+hotel.getHotelname());
+        logger.info("POST: adding new hotel to database with name:" + hotel.getHotelname());
         MessageResponse hotelCreated = hotelService.createHotel(hotel);
         return new ResponseEntity<>(hotelCreated, HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
     public Optional<Hotel> updateHotel(@PathVariable Integer id, @RequestBody Hotel hotel) {
-        logger.info("PUT: update hotel details for hotel :"+hotel.getHotelname());
+        logger.info("PUT: update hotel details for hotel :" + hotel.getHotelname());
         return hotelService.updateHotel(id, hotel);
 
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteHotel(@PathVariable("id") Integer id) {
-        logger.info("Delete : delete hotel details for  hotelid:"+id);
-    	hotelService.deleteHotel(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<String> deleteHotel(@PathVariable("id") Integer id) {
+        logger.info("Delete : delete hotel details for  hotelid:" + id);
+        hotelService.deleteHotel(id);
+        return new ResponseEntity<>("Hotel deleted successfully with id " + id, HttpStatus.OK);
     }
 
 
     @PostMapping("/addRooms/{hotelId}")
-    public ResponseEntity<Hotel> addHotel(@PathVariable("hotelId") Integer hotelId,@RequestBody Rooms room) {
+    public ResponseEntity<Hotel> addHotel(@PathVariable("hotelId") Integer hotelId, @RequestBody Rooms room) {
 
         Hotel hotel = hotelService.getHotelDetailsById(hotelId);
-        logger.info("Post: adding new rooms in hotel:"+hotel.getHotelname());
+        logger.info("Post: adding new rooms in hotel:" + hotel.getHotelname());
         List<Rooms> roomList = hotel.getRooms();
         roomList.add(room);
+        logger.info("adding room to the room list in hotel name :" + hotel.getHotelname());
         hotel.setRooms(roomList);
-        hotelService.updateHotel(hotelId,hotel);
+        hotelService.updateHotel(hotelId, hotel);
 
         return new ResponseEntity<Hotel>(hotel, HttpStatus.CREATED);
     }
 
     @PostMapping("/bookRoom")
     public ResponseEntity<BookingDetails> bookRoom(@RequestBody BookRoom bookroom) {
-        BookingDetails bookingDetails = new BookingDetails() ;
-        bookingDetails.setDate_from(HotelUtils.convertDate(bookroom.getDate_from()));
-        bookingDetails.setDate_to(HotelUtils.convertDate(bookroom.getDate_to()));
-        bookingDetails.setTotal_price(bookroom.getTotal_price());
-        bookingDetails.setUser_id(bookroom.getUserid());
-        bookingDetails.setRoom_id(bookroom.getRoom_id());
-        bookingDetails.setBook_ref_num(UUID.randomUUID().toString().replace("-", ""));
-        bookingDetails.setGuests(bookroom.getGuestList());
-
-//        BookingDetails bookings = new BookingDetails(, , , , );
-       BookingDetails booking=  hotelService.bookRoom(bookingDetails);
+        BookingDetails bookingDetails = hotelService.getBookingDetails(bookroom);
+        BookingDetails booking = hotelService.bookRoom(bookingDetails);
 
         return new ResponseEntity<BookingDetails>(booking, HttpStatus.CREATED);
     }
+
+
     @GetMapping("/hoteRoomlListForBooking")
-    public ResponseEntity<Hotel> getHotelListByLocation (@RequestBody BookHotelRoom bookHotelRoom) {
+    public ResponseEntity<Hotel> getHotelListByLocation(@RequestBody BookHotelRoom bookHotelRoom) {
         logger.info("GET: ferching all the list of hotel room eligible for booking for given date range");
-        logger.info("checkin date:"+bookHotelRoom.getCheckindate()+" checkout date "+bookHotelRoom.getCheckoutDate()+" hotel name: "+bookHotelRoom.getHotelName());
+        logger.info("checkin date:" + bookHotelRoom.getCheckindate() + " checkout date " + bookHotelRoom.getCheckoutDate() + " hotel name: " + bookHotelRoom.getHotelName());
         Hotel hotelRoomListForBooking = hotelService.getAvailableRooms(bookHotelRoom);
         return new ResponseEntity<>(hotelRoomListForBooking, HttpStatus.OK);
     }
