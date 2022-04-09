@@ -18,21 +18,12 @@ public class Hotel implements Serializable {
 	    private String city;
 		private String country;
 		private String address;
+		private Float price;
 		@OneToMany(cascade = CascadeType.ALL)
 		@JoinColumn(name = "hotel_id", referencedColumnName = "id")
 		List< Rooms > rooms = new ArrayList< >();
 
 
 
-	@Override
-	public String toString() {
-		return "Hotel{" +
-				"id=" + id +
-				", hotelname='" + hotelname + '\'' +
-				", starrating=" + starrating +
-				", city='" + city + '\'' +
-				", country='" + country + '\'' +
-				", address='" + address + '\'' +
-				'}';
-	}
+
 }

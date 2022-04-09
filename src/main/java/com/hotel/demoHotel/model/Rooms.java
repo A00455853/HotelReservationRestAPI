@@ -21,5 +21,4 @@ public class Rooms implements Serializable {
 
     @Column(name = "price")
     private double price;
-
 }

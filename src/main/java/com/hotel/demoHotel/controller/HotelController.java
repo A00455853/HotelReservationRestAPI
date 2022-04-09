@@ -108,5 +108,15 @@ public class HotelController {
         return new ResponseEntity<>(hotelRoomListForBooking, HttpStatus.OK);
     }
 
+    @GetMapping("listHotel/{checkindate}/{checkoutdate}")
+    public ResponseEntity<List<Hotel>> getHotelList( @PathVariable("checkindate") String checkindate,@PathVariable("checkoutdate") String checkoutdate) {
+        logger.info("GET: ferching all the list of hotel room eligible for booking for given date range");
+        logger.info("checkin date:" + checkindate + " checkout date " + checkoutdate);
+
+        List<Hotel> hotelList = hotelService.getAllAvailableHotel(checkindate,checkindate);
+        return new ResponseEntity<>(hotelList, HttpStatus.OK);
+    }
+
+
 
 }

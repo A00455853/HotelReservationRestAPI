@@ -29,4 +29,5 @@ public interface HotelService {
 
     Hotel getAvailableRooms(BookHotelRoom bookHotelRoom);
      BookingDetails getBookingDetails(BookRoom bookroom) ;
+     List<Hotel>getAllAvailableHotel(String checkindate, String checkoutdate);
 }

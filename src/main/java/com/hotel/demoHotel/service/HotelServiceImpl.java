@@ -1,5 +1,6 @@
 package com.hotel.demoHotel.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -132,5 +133,22 @@ public class HotelServiceImpl implements HotelService{
 		bookingDetails.setBook_ref_num(UUID.randomUUID().toString().replace("-", ""));
 		bookingDetails.setGuests(bookroom.getGuestList());
 		return bookingDetails;
+	}
+
+	@Override
+	public List<Hotel> getAllAvailableHotel(String checkindate, String checkoutdate) {
+		List<Hotel> hotelList =hotelRepository.findAll();
+		List<Hotel>availableHotelList = new ArrayList<Hotel>();
+
+		for (Hotel hotel:hotelList){
+
+			List<Rooms> roomList = roomsRepository.findAvailableHotel(hotel.getId(),checkindate,checkoutdate);
+			if(roomList.size()>0){
+			Hotel hotelobj = new Hotel();
+			availableHotelList.add(hotel);
+			}
+
+		}
+		return availableHotelList;
 	}
 }
